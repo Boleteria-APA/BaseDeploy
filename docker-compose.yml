@@ -1,0 +1,92 @@
+version: "3.8"
+
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "8080:80" # http://localhost:8080 -> HAProxy
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - gateway1
+      - gateway2
+    networks:
+      - boleteria-network
+
+  gateway1:
+    build: ./Client-Gateway
+    container_name: gateway1
+    expose:
+      - "3000"
+    env_file:
+      - ./Client-Gateway/.env
+    depends_on:
+      - auth_ms
+      - event_ms
+    networks:
+      - boleteria-network
+    volumes:
+      - shared-vouchers:/app/images
+
+  gateway2:
+    build: ./Client-Gateway
+    container_name: gateway2
+    expose:
+      - "3000"
+    env_file:
+      - ./Client-Gateway/.env
+    depends_on:
+      - auth_ms
+      - event_ms
+    networks:
+      - boleteria-network
+    volumes:
+      - shared-vouchers:/app/images
+
+  auth_ms:
+    build: ./Auth-MS
+    container_name: auth_ms
+    expose:
+      - "3001"
+    networks:
+      - boleteria-network
+
+  event_ms:
+    build: ./Event-MS
+    container_name: event_ms
+    expose:
+      - "3002"
+    networks:
+      - boleteria-network
+
+  ticket_ms:
+    build: ./TicketMS
+    container_name: ticket_ms
+    expose:
+      - "3003"
+    env_file:
+      - ./TicketMS/.env
+    networks:
+      - boleteria-network
+    volumes:
+      - shared-vouchers:/app/images
+
+  notification_ms:
+    build: ./NotificationMS
+    container_name: notification_ms
+    expose:
+      - "3004"
+    env_file:
+      - ./NotificationMS/.env
+    networks:
+      - boleteria-network
+    volumes:
+      - shared-vouchers:/app/images
+
+networks:
+  boleteria-network:
+    external: true
+
+volumes:
+  shared-vouchers:
