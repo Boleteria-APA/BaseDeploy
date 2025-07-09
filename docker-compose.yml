@@ -53,7 +53,7 @@ services:
       - boleteria-network
 
   event_ms:
-    build: ./Event-MS
+    build: ../Event-MS
     container_name: event_ms
     expose:
       - "3002"
@@ -61,24 +61,24 @@ services:
       - boleteria-network
 
   ticket_ms:
-    build: ./TicketMS
+    build: ../TicketMS
     container_name: ticket_ms
     expose:
       - "3003"
     env_file:
-      - ./TicketMS/.env
+      - ../TicketMS/.env
     networks:
       - boleteria-network
     volumes:
       - shared-vouchers:/app/images
 
   notification_ms:
-    build: ./NotificationMS
+    build: ../NotificationMS
     container_name: notification_ms
     expose:
       - "3004"
     env_file:
-      - ./NotificationMS/.env
+      - ../NotificationMS/.env
     networks:
       - boleteria-network
     volumes:
