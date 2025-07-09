@@ -15,12 +15,12 @@ services:
       - boleteria-network
 
   gateway1:
-    build: ./Client-Gateway
+    build: ../Client-Gateway
     container_name: gateway1
     expose:
       - "3000"
     env_file:
-      - ./Client-Gateway/.env
+      - ../Client-Gateway/.env
     depends_on:
       - auth_ms
       - event_ms
@@ -30,12 +30,12 @@ services:
       - shared-vouchers:/app/images
 
   gateway2:
-    build: ./Client-Gateway
+    build: ../Client-Gateway
     container_name: gateway2
     expose:
       - "3000"
     env_file:
-      - ./Client-Gateway/.env
+      - ../Client-Gateway/.env
     depends_on:
       - auth_ms
       - event_ms
@@ -45,7 +45,7 @@ services:
       - shared-vouchers:/app/images
 
   auth_ms:
-    build: ./Auth-MS
+    build: ../Auth-MS
     container_name: auth_ms
     expose:
       - "3001"
